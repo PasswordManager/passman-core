@@ -17,7 +17,7 @@
 
 -----------------------------------------------------------------------------
 -- |
--- Module      : Passman.Core.PassList.Lens
+-- Module      : Passman.Core.Entry.Lens
 -- Copyright   : Matthew Harm Bekkema 2017
 -- License     : GPL-3
 -- Maintainer  : mbekkema97@gmail.com
