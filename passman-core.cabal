@@ -1,5 +1,5 @@
 name:                passman-core
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Deterministic password generator core
 description:
     Generates unique passwords deterministically from a single master password.
@@ -30,6 +30,9 @@ library
                        Passman.Core.Info
                        Passman.Core.Entry
                        Passman.Core.Entry.Lens
+                       Passman.Core.Version
+  other-modules:       Paths_passman_core
+  autogen-modules:     Paths_passman_core
   ghc-options:         -Wall
   build-depends:       passman-core-internal
                      , base            >= 4.9     && < 4.11
