@@ -51,12 +51,10 @@ configExamples :: [(Config, Config)]
 configExamples = zip' wanted got
   where
     got = map (fromJust . decode . encodeUtf8 . T.unlines)
-              [ ["masterPasswordHash: \"$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy\""]
-              , ["masterPasswordHash: \"$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy\""
-              ,"passlistPath: \"/path/to/passlist.txt\""]
+              [ ["masterPasswordHash: \"$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy\""
+                ,"passlistPath: \"/path/to/passlist.txt\""]
               ]
-    wanted = [ Config "$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" Nothing
-             , Config "$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" (Just "/path/to/passlist.txt")
+    wanted = [ Config "$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" "/path/to/passlist.txt"
              ]
 
 -- | Ensure the examples in "Passman.Core.Entry" are correct.

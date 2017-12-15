@@ -43,7 +43,7 @@ masterPasswordHash :: Functor f => (Text -> f Text)
                                 -> C.Config -> f C.Config
 masterPasswordHash f (C.Config a b) = flip C.Config b <$> f a
 
--- | The path to the last used passlist file
-passlistPath :: Functor f => (Maybe FilePath -> f (Maybe FilePath))
+-- | Path to the passlist file
+passlistPath :: Functor f => (FilePath -> f FilePath)
                           -> C.Config -> f C.Config
 passlistPath f (C.Config a b) = C.Config a <$> f b
