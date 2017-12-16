@@ -1,4 +1,4 @@
-## 0.2.0.0 (unreleased)
+## 0.2.0.0
 
 * Export version number in Passman.Core.Version
 * Make `passlistPath` non-optional in Config
