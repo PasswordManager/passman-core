@@ -39,14 +39,12 @@ module Passman.Core.Entry
     , entryToCsv
     ) where
 
-import           Control.Monad.Trans.Resource (MonadResource, MonadThrow,
-                                               throwM)
+import           Conduit (MonadResource, MonadThrow, throwM, ConduitT, (.|),
+                          mapC, mapMC, sourceFile, sinkFile, sinkIOHandle,
+                          decodeUtf8C, encodeUtf8C)
+
 import           Control.Monad                (mfilter)
 
-import           Data.Conduit        (ConduitM, (.|))
-import qualified Data.Conduit.List   as C
-import           Data.Conduit.Binary (sourceFile, sinkFile, sinkIOHandle)
-import           Data.Conduit.Text   (decodeUtf8, encodeUtf8)
 import           Data.CSV.Conduit    (intoCSV, fromCSV, defCSVSettings)
 
 import           Numeric.Natural (Natural)
@@ -92,12 +90,12 @@ data Entry = Entry
     deriving (Show, Eq)
 
 -- | Load `Entry`s from the specified file.
-load :: MonadResource m => FilePath -> ConduitM i Entry m ()
-load f = sourceFile f .| decodeUtf8 .| textToEntry
+load :: (MonadThrow m, MonadResource m) => FilePath -> ConduitT i Entry m ()
+load f = sourceFile f .| decodeUtf8C .| textToEntry
 
 -- | Convert `Text` into `Entry`s.
-textToEntry :: MonadThrow m => ConduitM Text Entry m ()
-textToEntry = intoCSV defCSVSettings .| C.mapM csvToEntry
+textToEntry :: MonadThrow m => ConduitT Text Entry m ()
+textToEntry = intoCSV defCSVSettings .| mapMC csvToEntry
 
 -- | Attempt to convert CSV fields into an `Entry`.
 csvToEntry :: MonadThrow m => [Text] -> m Entry
@@ -108,17 +106,17 @@ csvToEntry [a,b,c] = Entry (Info a) <$> parseLength b <*> parseMode c
 csvToEntry _       = failM "too many columns"
 
 -- | Save `Entry`s to the specified file.
-save :: MonadResource m => FilePath -> ConduitM Entry o m ()
-save f = entryToText .| encodeUtf8 .| sinkFile f
+save :: MonadResource m => FilePath -> ConduitT Entry o m ()
+save f = entryToText .| encodeUtf8C .| sinkFile f
 
 -- | Append `Entry`s to the specified file.
-append :: MonadResource m => FilePath -> ConduitM Entry o m ()
-append fp = entryToText .| encodeUtf8 .| sinkIOHandle
+append :: MonadResource m => FilePath -> ConduitT Entry o m ()
+append fp = entryToText .| encodeUtf8C .| sinkIOHandle
     (openBinaryFile fp AppendMode)
 
 -- | Convert an `Entry` into `Text` for saving to file.
-entryToText :: Monad m => ConduitM Entry Text m ()
-entryToText = C.map entryToCsv .| fromCSV defCSVSettings
+entryToText :: Monad m => ConduitT Entry Text m ()
+entryToText = mapC entryToCsv .| fromCSV defCSVSettings
 
 -- | Convert an `Entry` into CSV fields.
 entryToCsv :: Entry -> [Text]

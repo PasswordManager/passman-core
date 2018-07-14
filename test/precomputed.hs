@@ -19,8 +19,7 @@
 
 import           Data.Functor.Identity (Identity (Identity))
 
-import           Data.Conduit       ((.|), yield, sourceToList)
-import           Data.Conduit.Lift  (runCatchC)
+import           Conduit ((.|), yield, sourceToList, runCatchC)
 
 import           Data.Maybe         (fromJust)
 import           Data.Yaml          (decode)

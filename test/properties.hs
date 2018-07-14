@@ -31,9 +31,8 @@ import           Data.Traversable      (for)
 import           Data.Maybe            (fromJust, isJust)
 import qualified Data.Text             as T
 
-import           Data.Conduit      ((.|), sourceToList, runConduitRes)
-import           Data.Conduit.List (sourceList, consume)
-import           Data.Conduit.Lift (runCatchC)
+import           Conduit ((.|), runConduitRes, runResourceT, runCatchC,
+                          sourceToList, yieldMany)
 
 import           System.IO.Temp  (withSystemTempDirectory)
 import           System.FilePath ((</>))
@@ -126,16 +125,16 @@ prop_idempotentMode = and $ do
 prop_showReadEntry :: [Entry] -> Bool
 prop_showReadEntry xs = xs == xs'
   where
-    Identity xs' = sourceToList (sourceList xs .| entryToText .| textToEntry')
+    Identity xs' = sourceToList (yieldMany xs .| entryToText .| textToEntry')
     textToEntry' = runCatchC textToEntry >>= either (fail . show) pure
 
 prop_saveAppendLoadEntry :: [Entry] -> [Entry] -> Property
 prop_saveAppendLoadEntry xs ys = monadicIO $ do
     zs <- run $ withSystemTempDirectory "passman-testcase" $ \dir -> do
         let fp = dir </> "list.txt"
-        runConduitRes $ sourceList xs .| save fp
-        runConduitRes $ sourceList ys .| append fp
-        runConduitRes $ load fp .| consume
+        runConduitRes $ yieldMany xs .| save fp
+        runConduitRes $ yieldMany ys .| append fp
+        runResourceT  $ sourceToList $ load fp
     assert $ (xs ++ ys) == zs
 
 prop_toFromBase :: Natural -> Natural -> Bool
