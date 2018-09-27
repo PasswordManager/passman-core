@@ -38,13 +38,14 @@ import           System.IO.Temp  (withSystemTempDirectory)
 import           System.FilePath ((</>))
 import           System.Exit     (exitFailure)
 
-import           Test.QuickCheck         (Arbitrary (arbitrary, shrink), Gen,
-                                          Result, Property, suchThat,
-                                          arbitraryBoundedEnum)
-import           Test.QuickCheck.Monadic (PropertyM, assert, run, monadicIO,
-                                          pre)
-import           Test.QuickCheck.Test    (isSuccess, output)
-import qualified Test.QuickCheck.Unicode as U
+import           Test.QuickCheck           (Arbitrary (arbitrary, shrink), Gen,
+                                            Result, Property, suchThat,
+                                            arbitraryBoundedEnum)
+import           Test.QuickCheck.Monadic   (PropertyM, assert, run, monadicIO,
+                                            pre)
+import           Test.QuickCheck.Test      (isSuccess, output)
+import qualified Test.QuickCheck.Unicode   as U
+import           Test.QuickCheck.Instances ()
 
 import           Passman.Core.Mode  (SingletonMode, Mode (Mode), validModes,
                                      readMode, characterCode)

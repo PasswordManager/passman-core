@@ -95,11 +95,12 @@ test-suite properties
                      , filepath
                      , text
 
-                     , async               >= 2.1.0   && < 2.3
-                     , QuickCheck         ^>= 2.9.2
-                     , quickcheck-unicode ^>= 1.0.1.0
-                     , template-haskell    >= 2.11    && < 2.15
-                     , temporary           >= 1.2.0.3 && < 1.4
+                     , async                 >= 2.1.0   && < 2.3
+                     , QuickCheck            >= 2.9.2   && < 2.13
+                     , quickcheck-instances ^>= 0.3.13
+                     , quickcheck-unicode   ^>= 1.0.1.0
+                     , template-haskell      >= 2.11    && < 2.15
+                     , temporary             >= 1.2.0.3 && < 1.4
   default-language:    Haskell2010
   other-extensions:    TemplateHaskell
                        TemplateHaskellQuotes
